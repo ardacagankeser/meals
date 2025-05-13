@@ -7,9 +7,18 @@ class MealItem extends StatelessWidget {
   const MealItem({
     super.key,
     required this.meal,
+    required this.onSelectMeal,
   });
 
   final Meal meal;
+
+  final void Function(BuildContext context, Meal meal) onSelectMeal;
+
+  String get durationText {
+  return meal.duration < 60
+    ? '${meal.duration} min'
+    : '${meal.duration ~/ 60} h, ${meal.duration % 60} min';
+  }
 
   String get complexityText {
     return meal.complexity.name[0].toUpperCase() + 
@@ -36,7 +45,7 @@ class MealItem extends StatelessWidget {
 
       child: InkWell(
         onTap: () {
-          
+          onSelectMeal(context, meal);
         },
 
         child: Stack(
@@ -82,7 +91,7 @@ class MealItem extends StatelessWidget {
                       children: [
                         MealItemTrait( // Duration
                           icon: Icons.schedule_rounded,
-                          label: "${meal.duration} min.",
+                          label: durationText,
                         ),
 
                         SizedBox(width: 12,),
